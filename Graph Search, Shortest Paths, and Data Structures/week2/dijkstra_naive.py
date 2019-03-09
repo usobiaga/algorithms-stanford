@@ -5,30 +5,30 @@ REPORT_EDGES = ['7','37','59','82','99','115','133','165','188','197']
 
 def read_graph():
     graph = {}
-    edges = []
     with open(FILE, 'r') as f:
         for l in f.readlines():
             line = l.split()
             edge = line[0]
-            edges.append(edge)
             graph[edge] = []
             graph[edge] = [x.split(',') for x in line[1:]]
-    return graph, edges
+    return graph
 
-def dijkstra(graph, edges, edge):
+def dijkstra(graph, edge):
 
     X = {edge : 0}
-    B = {}.fromkeys(edges)
+    B = {}.fromkeys(graph.keys())
     B[edge] = []
 
-    while len(X) < len(edges):
+    while len(X) < len(graph.keys()):
 
         minVal = float('Inf')
         
         for origin in X.keys():
             for destiny in graph[origin]:
+                
                 if destiny[0] not in X.keys():
                     val = X[origin] + int(destiny[1])
+                    
                     if val < minVal:
                         edge_to_add = destiny[0]
                         minVal = val
@@ -42,7 +42,8 @@ def dijkstra(graph, edges, edge):
         
 if __name__ == '__main__':
     
-    graph, edges = read_graph()
-    X, B = dijkstra(graph, edges, '1')
+    graph = read_graph()
+    X, B = dijkstra(graph, '1')
     results = [X[edge] for edge in REPORT_EDGES]
+    print (results)
     
